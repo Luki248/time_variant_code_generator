@@ -24,14 +24,13 @@ def clear():
 
 def generate_hash(input):
     h = hashlib.sha256()
-    h.update(str(time_f).encode())
+    h.update(str(input).encode())
     return h.hexdigest()
 
 
 def get_password_and_compare():
     h = hashlib.sha256()
-    #h.update(getpass.getpass("Passwort: ").encode())
-    h.update("12345".encode())
+    h.update(getpass.getpass("Passwort: ").encode())
     hash1 = h.hexdigest()
     h = hashlib.sha256()
     h.update(hard_coded_password.encode())
@@ -44,10 +43,9 @@ def make_xor(hash1, hash2):
     return hash3[2:]
 
 
-if __name__ == "__main__":
-
+def generate_passphrase():
     password_compared, hash_pswd = get_password_and_compare()
-    if True:
+    if password_compared:
         clear()
 
         time_f = int(time.time())
@@ -72,3 +70,8 @@ if __name__ == "__main__":
     else:
         print("Wrong Password!")
         exit()
+
+
+if __name__ == "__main__":
+    generate_passphrase()
+    
