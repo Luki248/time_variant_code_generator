@@ -43,6 +43,12 @@ def make_xor(hash1, hash2):
     return hash3[2:]
 
 
+def make_combined_hash(time, hash_pswd):
+    hash_time = generate_hash(str(time).encode())
+    hash_combined = make_xor(hash_time, hash_pswd)
+    return generate_hash(hash_combined)
+
+
 def generate_passphrase():
     password_compared, hash_pswd = get_password_and_compare()
     if password_compared:
@@ -50,19 +56,19 @@ def generate_passphrase():
 
         time_f = int(time.time())
         time_new = time_f - (time_f % 10)
-        hash_time = generate_hash(str(time_new).encode())
         time_struct = time.gmtime(time_new)
-        print(time.asctime(time_struct), make_xor(hash_time, hash_pswd))
+        hash = make_combined_hash(time_new, hash_pswd)
+        print(time.asctime(time_struct), hash)
 
 
         while True:
             time_f = int(time.time())
 
             if time_f % 10 == 0:
-                hash_time = generate_hash(str(time_f).encode())
-                time_struct = time.gmtime(time_f)
                 clear()
-                print(time.asctime(time_struct), make_xor(hash_time, hash_pswd))
+                time_struct = time.gmtime(time_f)
+                hash = make_combined_hash(time_f, hash_pswd)
+                print(time.asctime(time_struct), hash)
             
             print("\r", 9 - (time_f % 10), " ", end="")
             time.sleep(1)
